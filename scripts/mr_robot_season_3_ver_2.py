@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import print_function, unicode_literals
 
 import bs4
 import requests
@@ -9,7 +10,8 @@ from bgmi.script import ScriptBase
 import re
 
 ua = {
-    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'}
+    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X)'
+                  ' AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'}
 
 
 class Script(ScriptBase):
@@ -27,7 +29,6 @@ class Script(ScriptBase):
         soup = BeautifulSoup(resp, 'lxml')
 
         data = soup.find('div', id='item1mobile')  # type: bs4.Tag
-        # data = data.find(class_='panel panel-white')
         data = data.find_all('a', class_='aurl')
         regex_expression = re.compile(
             r'http://m\.zimuzu\.tv/resource/item\?rid={}&season=(?P<season>\d+)&episode=(?P<episode>\d+)'.format(id))
@@ -42,7 +43,7 @@ class Script(ScriptBase):
         return result
 
 
-def page_url_to_magnet(url: str):
+def page_url_to_magnet(url):
     r = requests.get(url, headers=ua).content
     r = BeautifulSoup(r, 'lxml')
     for link in r.find_all('a', class_='copy'):
