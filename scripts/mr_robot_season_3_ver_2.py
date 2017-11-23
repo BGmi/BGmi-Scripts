@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 
 from bgmi.script import ScriptBase
 
-
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X)'
                   ' AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'}
@@ -40,7 +39,7 @@ class Script(ScriptBase):
         data = data.find_all('a', class_='aurl')
         regex_expression = re.compile(
             r'http://m\.zimuzu\.tv/resource/item\?rid={}&season=(?P<season>\d+)&episode=(?P<episode>\d+)'
-            .format(resource_id))
+                .format(resource_id))
         result = {}
         for a_tag in data:
             page_url = a_tag['href']
@@ -60,6 +59,18 @@ def page_url_to_magnet(url):
     """
     response = requests.get(url, headers=HEADERS).content
     response = BeautifulSoup(response, 'lxml')
-    for link in response.find_all('a', class_='copy'):
-        if link['data-url'].startswith('magnet:?xt=urn:btih:'):
-            return link['data-url']
+    for li in response.find_all('li', class_="mui-table-view-cell mui-collapse"):
+        badge = li.find('span', class_="mui-badge")
+        for string in badge.strings:
+            if '中文' in string:
+                for link in li.find_all('a', class_='copy'):
+                    if link['data-url'].startswith('magnet:?xt=urn:btih:'):
+                        return link['data-url']
+
+
+if __name__ == '__main__':
+    s = Script()
+    r = s.get_download_url()
+    from pprint import pprint
+
+    pprint(r)
