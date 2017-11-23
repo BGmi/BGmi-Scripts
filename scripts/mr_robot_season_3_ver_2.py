@@ -61,11 +61,10 @@ def page_url_to_magnet(url):
     response = BeautifulSoup(response, 'lxml')
     for li in response.find_all('li', class_="mui-table-view-cell mui-collapse"):
         badge = li.find('span', class_="mui-badge")
-        for string in badge.strings:
-            if '中文' in string:
-                for link in li.find_all('a', class_='copy'):
-                    if link['data-url'].startswith('magnet:?xt=urn:btih:'):
-                        return link['data-url']
+        if '中文' in badge.text:
+            for link in li.find_all('a', class_='copy'):
+                if link['data-url'].startswith('magnet:?xt=urn:btih:'):
+                    return link['data-url']
 
 
 if __name__ == '__main__':
