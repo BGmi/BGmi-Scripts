@@ -10,30 +10,33 @@ from bs4 import BeautifulSoup
 
 from bgmi.script import ScriptBase
 
+BANGUMI_NAME = 'Sillicon Valley'
+UPDATE_TIME = 'Mon'
+COVER = 'http://renren.maoyun.tv/ftp/2018/0226/b_8ddd4f8d7fa60f961de34d5b6ab883db.jpg'
+RESOURCE_ID = 31801
+SEASON = 5
+
+
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                  ' (KHTML, like Gecko) Chrome/66.0.3359.170 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6',
-}
+    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X)'
+                  ' AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'}
 
 
 class Script(ScriptBase):
     class Model(ScriptBase.Model):
-        bangumi_name = 'Sillicon Valley'
+        bangumi_name = BANGUMI_NAME
         # this cover may be failure
-        cover = 'http://renren.maoyun.tv/ftp/2018/0226/b_8ddd4f8d7fa60f961de34d5b6ab883db.jpg'
+        cover = COVER
         # due_date = datetime(2017, 10, 1)
-        update_time = 'Mon'
+        update_time = UPDATE_TIME
 
     def get_download_url(self):
         """
         for another teleplay, you just need to change `season_to_download` and `resource_id`
         """
         # config
-        season_to_download = 5
-        resource_id = 31801
+        season_to_download = SEASON
+        resource_id = RESOURCE_ID
 
         # fetch and return dict
         resp = requests.get('http://m.zimuzu.tv/resource/{}'.format(resource_id), headers=HEADERS).content
@@ -47,9 +50,7 @@ class Script(ScriptBase):
         print(data)
         for a_tag in data:
             page_url = a_tag['href'].replace('&amp;', '&')
-            print(page_url)
             re_result = regex_expression.match(page_url)
-            print(re_result)
             if re_result.group('season') == str(season_to_download):
                 result[re_result.group('episode')] = page_url
 
