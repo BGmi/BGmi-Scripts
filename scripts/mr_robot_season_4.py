@@ -14,7 +14,7 @@ from bgmi.config import IS_PYTHON3
 class Script(ScriptBase):
 
     class Model(ScriptBase.Model):
-        bangumi_name = 'Mr Robot Season 3'
+        bangumi_name = 'Mr Robot Season 4'
         cover = 'https://www.333tv.com/wp-content/uploads/2019/08/333tv288022311624311.jpg'
         due_date = datetime(2020, 1, 30)
         update_time = 'Mon'
