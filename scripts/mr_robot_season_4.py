@@ -35,7 +35,6 @@ class Script(ScriptBase):
         ret = {}
         match_episode = re.compile('第([\d]+)集')
         for row in data.find_all('ul')[2].find_all('li'):
-            print(row.a.attrs)
             link = row.a.attrs['href']
             episode = match_episode.findall(row.text)
             if episode:
